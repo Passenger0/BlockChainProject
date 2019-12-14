@@ -1,0 +1,7 @@
+[ERROR] [2019-12-14 10:36:16] org.fisco.bcos.channel.client.Service.run(349) | system error 
+java.lang.NullPointerException
+	at org.fisco.bcos.channel.handler.ChannelHandlerContextHelper.getProtocolVersion(ChannelHandlerContextHelper.java:50)
+	at org.fisco.bcos.channel.handler.ChannelHandlerContextHelper.isChannelAvailable(ChannelHandlerContextHelper.java:69)
+	at org.fisco.bcos.channel.client.Service.run(Service.java:321)
+	at org.fisco.bcos.asset.client.TestClient.initialize(TestClient.java:86)
+	at org.fisco.bcos.asset.client.TestClient.main(TestClient.java:466)

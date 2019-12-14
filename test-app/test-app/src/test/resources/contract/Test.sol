@@ -314,16 +314,19 @@ contract Test {
                 for (uint256 i = uint256(0)  ; i < receiptCount ; i++){
                     if(hashCompareInternal(ReceiptList[i].from ,source)
                          && hashCompareInternal(ReceiptList[i].to,from)){
-                        if(ReceiptList[i].amount <= amount_to_transfer){
+                    	//将收款人改为to
+                        if(ReceiptList[i].amount < amount_to_transfer){
                             amount_to_transfer -= ReceiptList[i].amount;
                             ReceiptList[i].to = to;
                             //delete ReceiptList[i];
                         }else {
+                           //新增收款人为to的收据，金额为amount_to_transfer
                             uint256 begin = ReceiptList[i].begin;
                             uint256 end = ReceiptList[i].end;
                             Receipt memory newReceipt = Receipt(++receiptID,source,to,amount_to_transfer,begin,end);
-                            receiptCount++;
-
+                           //不可少的一步：将新增收据信息加入收据总表
+                            receiptCount = ReceiptList.push(newReceipt);
+                           
                             ReceiptList[i].amount -= amount_to_transfer;
                             amount_to_transfer = 0;
                         }
@@ -405,6 +408,7 @@ contract Test {
                     return (ret_code,ReceiptList[i].from,ReceiptList[i].to,ReceiptList[i].amount);
                 }
             }
+            ret_code = -1;
             return (ret_code,"","",uint256(0));
         }
         //return newReceipt;
@@ -557,3 +561,4 @@ contract Test {
         return true;*/
     }
 }
+

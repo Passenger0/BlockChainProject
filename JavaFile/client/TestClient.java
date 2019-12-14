@@ -176,16 +176,16 @@ public class TestClient {
 			System.out.printf(" decrease bank money failed, error message is %s\n", e.getMessage());
 		}
 	}
-	public void checkTestAccount(String testAccount) {
+	public void checkTestAccount(String account) {
 		try {
 			String contractAddress = loadTestAddr();
 
 			Test test = Test.load(contractAddress, web3j, credentials, new StaticGasProvider(gasPrice, gasLimit));
-			Tuple2<BigInteger, BigInteger> result = test.findCompany(testAccount).send();
+			Tuple2<BigInteger, BigInteger> result = test.findCompany(account).send();
 			if (result.getValue1().compareTo(new BigInteger("0")) == 0) {
-				System.out.printf(" account %s, value %s \n", testAccount, result.getValue2());
+				System.out.printf(" account: %s, value: %s \n", account, result.getValue2());
 			} else {
-				System.out.printf(" account:%s is not exist \n", testAccount);
+				System.out.printf(" account:%s is not exist \n", account);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -195,16 +195,16 @@ public class TestClient {
 			System.out.printf(" check account existence failed, error message is %s\n", e.getMessage());
 		}
 	}
-	public void checkTestAccount(String testAccount,String testAddress) {
+	public void checkTestAccount(String account,String testAddress) {
 		try {
 			String contractAddress = loadTestAddr();
 
 			Test test = Test.load(contractAddress, web3j, credentials, new StaticGasProvider(gasPrice, gasLimit));
-			Tuple2<BigInteger, BigInteger> result = test.findCompany(testAccount,testAddress).send();
+			Tuple2<BigInteger, BigInteger> result = test.findCompany(account,testAddress).send();
 			if (result.getValue1().compareTo(new BigInteger("0")) == 0) {
-				System.out.printf(" account %s, value %s \n", testAccount, result.getValue2());
+				System.out.printf(" account: %s, value: %s \n", account, result.getValue2());
 			} else {
-				System.out.printf(" account:%s is not exist \n", testAccount);
+				System.out.printf(" account:%s is not exist \n", account);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -215,16 +215,16 @@ public class TestClient {
 		}
 	}
 
-	public void findTestAccountID(String testAccount) {
+	public void findTestAccountID(String account) {
 		try {
 			String contractAddress = loadTestAddr();
 
 			Test test = Test.load(contractAddress, web3j, credentials, new StaticGasProvider(gasPrice, gasLimit));
-			Tuple2<BigInteger, BigInteger> result = test.findCompanyID(testAccount).send();
+			Tuple2<BigInteger, BigInteger> result = test.findCompanyID(account).send();
 			if (result.getValue1().compareTo(new BigInteger("0")) == 0) {
-				System.out.printf(" account: %s, accountID: %s \n", testAccount, result.getValue2());
+				System.out.printf(" account: %s, accountID: %s \n", account, result.getValue2());
 			} else {
-				System.out.printf(" account:%s is not exist \n", testAccount);
+				System.out.printf(" account: %s is not exist \n", account);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -274,16 +274,16 @@ public class TestClient {
 		}
 	}
 
-	public void registerTestAccount(String testAccount, String address,BigInteger amount,BigInteger role) {
+	public void registerTestAccount(String account, String address,BigInteger amount,BigInteger role) {
 		try {
 			String contractAddress = loadTestAddr();
 
 			Test test = Test.load(contractAddress, web3j, credentials, new StaticGasProvider(gasPrice, gasLimit));
-			TransactionReceipt receipt = test.registerCompany(testAccount, address,amount,role).send();
+			TransactionReceipt receipt = test.registerCompany(account, address,amount,role).send();
 			List<RegisterEventEventResponse> response = test.getRegisterEventEvents(receipt);
 			if (!response.isEmpty()) {
 				if (response.get(0).ret.compareTo(new BigInteger("0")) == 0) {
-					System.out.printf(" register account success => test: %s, value: %s \n", testAccount,
+					System.out.printf(" register account success => account: %s, value: %s \n", account,
 							amount);
 				} else if(response.get(0).ret.compareTo(new BigInteger("1")) == 0) {
 					System.out.printf(" register account failed, ret code is %s \n",
@@ -546,4 +546,5 @@ public class TestClient {
 		System.exit(0);
 	}
 }
+
 

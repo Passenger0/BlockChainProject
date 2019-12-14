@@ -4,30 +4,30 @@ contract Test {
     //string process;
 
     struct Company{
-        uint256 id;//公司ID
-        string name;//姓名
-        string address_;//地址
+        uint256 id;
+        string name;
+        string address_;
         uint256 money;//总资产
         uint256 role; // 0 for bank,1 for company
-        uint256 registed;//是否注册
+        uint256 registed;
     }
 
     struct Receipt{
-        uint256 id;//收据id
-        string from;//收据欠款方
-        string to;//收据收款方
-        uint256 amount;//收据金额
+        uint256 id;
+        string from;
+        string to;
+        uint256 amount;
        // bool status; // 是否用于融资
-        uint256 begin;//收据开始日期
-        uint256 end; //收据到期日
+        uint256 begin;
+        uint256 end; 
         //bool finished;    
     }
 
     struct Finance{
-        uint256 finanID;//融资ID
-        string company;//融资企业名，
-        uint256 rcptID;//融资所用收据ID
-        uint256 amount;//融资金额。
+        uint256 finanID;
+        string company;
+        uint256 rcptID;
+        uint256 amount;
     }
 
     uint256 receiptID;
@@ -314,16 +314,19 @@ contract Test {
                 for (uint256 i = uint256(0)  ; i < receiptCount ; i++){
                     if(hashCompareInternal(ReceiptList[i].from ,source)
                          && hashCompareInternal(ReceiptList[i].to,from)){
-                        if(ReceiptList[i].amount <= amount_to_transfer){
+                    	//将收款人改为to
+                        if(ReceiptList[i].amount < amount_to_transfer){
                             amount_to_transfer -= ReceiptList[i].amount;
                             ReceiptList[i].to = to;
                             //delete ReceiptList[i];
                         }else {
+                           //新增收款人为to的收据，金额为amount_to_transfer
                             uint256 begin = ReceiptList[i].begin;
                             uint256 end = ReceiptList[i].end;
                             Receipt memory newReceipt = Receipt(++receiptID,source,to,amount_to_transfer,begin,end);
-                            receiptCount++;
-
+                           //不可少的一步：将新增收据信息加入收据总表
+                            receiptCount = ReceiptList.push(newReceipt);
+                           
                             ReceiptList[i].amount -= amount_to_transfer;
                             amount_to_transfer = 0;
                         }
@@ -405,6 +408,7 @@ contract Test {
                     return (ret_code,ReceiptList[i].from,ReceiptList[i].to,ReceiptList[i].amount);
                 }
             }
+            ret_code = -1;
             return (ret_code,"","",uint256(0));
         }
         //return newReceipt;
@@ -557,3 +561,4 @@ contract Test {
         return true;*/
     }
 }
+
